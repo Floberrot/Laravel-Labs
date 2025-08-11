@@ -8,9 +8,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/example', [ExampleController::class, 'get']);
+Route::controller(ExampleController::class)->group(function () {
+    Route::get('/example', 'get');
+    Route::get('/example/{id}', 'show')
+        ->name('example.show')
+        ->where('id', '[0-9]+')
+        ->middleware(LogMiddleware::class);
+});
 
-Route::get('/example/{id}', [ExampleController::class, 'show'])
-->name('example.show')
-->where('id', '[0-9]+')
-->middleware(LogMiddleware::class);
