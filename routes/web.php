@@ -1,12 +1,10 @@
 <?php
 
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\ExampleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('test',[TestController::class, 'index']);
-
-Route::view('/projects', 'projects');
+Route::get('/example', [ExampleController::class, 'get']);
