@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use function Symfony\Component\Translation\t;
+use App\Dto\Post;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends Controller
 {
-    public function store(Request $request): void
+    public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'test' => 'required|string'
-        ]);
-
-        $json = $request->json();
-
-        echo $json->get('test');
+        try {
+            $post = Post::fromRequest($request);
+            return new JsonResponse(
+                ['post' => $post],
+                200
+            );
+        } catch (\Exception $e) {
+            return new JsonResponse(
+                ['errors' => $e->getMessage() . $e->getLine() . $e->getFile()],
+                422
+            );
+        }
     }
 }
