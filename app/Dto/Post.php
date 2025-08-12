@@ -82,4 +82,13 @@ class Post
             tags: $request['tags'] ?? [],
         );
     }
+
+    public function toArray(): array
+    {
+        return [
+            'title' => $this->getTitle(),
+            'content' => $this->getContent(),
+            'tags' => $this->getTags(),
+        ];
+    }
 }
