@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,3 +67,14 @@ Route::get('/profiles/{user}', function (string $user) {
 
     return ['profile' => $user];
 });
+
+Route::controller(ArticleController::class)
+    ->name('articles.')
+    ->prefix('articles')
+    ->group(function () {
+        Route::get('', 'index')
+            ->name('index');
+        Route::get('{slug}', 'show')
+            ->where('slug', '[a-z0-9-]+')
+            ->name('show');
+    });
