@@ -1,14 +1,14 @@
 <?php
 
+use App\Enums\StatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TestController;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Route;
 
-//
-//Route::controller(ApiController::class)->group(function () {
-//    Route::post('test', 'store');
-//});
+Route::pattern('slug', '[a-z0-9-]+');
 
 Route::get('/ping', function () {
     return ['pong' => true];
@@ -28,16 +28,16 @@ Route::get('/hello-opt/{name?}', function (?string $name = null) {
 })->name('hello.opt');
 
 Route::get('/users/{id}', function (int $id) {
-    return ['id' =>$id];
+    return ['id' => $id];
 })
     ->where('id', '[0-9]+')
     ->name('users.show');
 
 Route::prefix('/v1')->name('v1.')->middleware('throttle:30,1')->group(function () {
-    Route::name('status')->get('status', function (){
+    Route::name('status')->get('status', function () {
         return ['status' => 'ok'];
     });
-    Route::name('version')->get('version', function (){
+    Route::name('version')->get('version', function () {
         return ['status' => 'v1'];
     });
 
@@ -53,7 +53,7 @@ Route::prefix('v1')
     });
 
 Route::redirect('/docs', '/api/documentation', 302);
-Route::get('/documentation', fn () => ['doc' => 'ok']);
+Route::get('/documentation', fn() => ['doc' => 'ok']);
 Route::redirect("old-home", "home", 301);
 
 Route::controller(TestController::class)->prefix('tests')->name('tests.')->group(function () {
@@ -75,6 +75,33 @@ Route::controller(ArticleController::class)
         Route::get('', 'index')
             ->name('index');
         Route::get('{slug}', 'show')
-            ->where('slug', '[a-z0-9-]+')
             ->name('show');
     });
+
+Route::get('/status/{status}', function (StatusEnum $status) {
+    return ['status' => $status->value];
+});
+
+
+
+Route::get('/files/link/{id}', function (int $id) {
+    $url = URL::temporarySignedRoute('files.download', now()->addSeconds(300), ['id' => $id]);
+    return ['link' => $url];
+})->name('files.link');
+
+Route::get('/files/{id}/download', function (int $id) {
+    return ['download' => $id];
+})->name('files.download')->middleware('signed');
+
+
+RateLimiter::for('search', function (\Illuminate\Http\Request $request){
+   return $request->user()
+       ? Limit::perMinute(100)->by($request->user()->id)
+       : Limit::perMinute(10)->by($request->ip());
+});
+
+Route::middleware('throttle:search')->group(function () {
+    Route::post('/search', fn() => ['ok' => true]);
+});
+
+Route::resource('projects.tasks', CommentController::class)->shallow();
