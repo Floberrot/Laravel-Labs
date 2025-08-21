@@ -123,3 +123,8 @@ Route::get('/session/flash/{value}', function (Request $request, string $value) 
 Route::get('/session/flash-get', function (Request $request) {
     return ['flash' => session()->get('flash_key', 'none')];
 });
+
+
+Route::controller(ApiController::class)->prefix('v2')->name('api.v2.')->group(function () {
+    Route::post('register', 'register');
+});
