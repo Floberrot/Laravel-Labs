@@ -105,3 +105,21 @@ Route::middleware('throttle:search')->group(function () {
 });
 
 Route::resource('projects.tasks', CommentController::class)->shallow();
+
+Route::get('/session/set/{value}', function (Request $request, string $value) {
+    session()->put('my_key', $value);
+    return ['message' => "Session set: {$value}"];
+});
+
+Route::get('/session/get', function (Request $request) {
+    return ['value' => session()->get('my_key', 'not set')];
+})->name('session.get');
+
+Route::get('/session/flash/{value}', function (Request $request, string $value) {
+    session()->flash('flash_key', $value);
+    return ['message' => "Flash set: {$value}"];
+});
+
+Route::get('/session/flash-get', function (Request $request) {
+    return ['flash' => session()->get('flash_key', 'none')];
+});
