@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dto\Post;
+use App\Exceptions\InvalidUsernameException;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\PostResource;
 use Illuminate\Http\Request as HttpRequest;
@@ -40,6 +41,10 @@ class ApiController extends Controller
         //            ], 422);
         //        }
         $data = $request->validated();
+
+        if ($data['username'] === $data['name']) {
+            throw new InvalidUsernameException($data['username']);
+        }
 
         return response()->json([
             'message' => 'User registered successfully',
