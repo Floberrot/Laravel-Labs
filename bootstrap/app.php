@@ -20,5 +20,5 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api('measure');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->dontReportDuplicates();
     })->create();
