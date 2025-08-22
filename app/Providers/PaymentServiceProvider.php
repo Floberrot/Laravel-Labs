@@ -7,7 +7,6 @@ use App\Services\PaymentGatewayInterface;
 use App\Services\PaypalGateway;
 use App\Services\StripeGateway;
 use Illuminate\Support\ServiceProvider;
-use Psy\Util\Str;
 
 class PaymentServiceProvider extends ServiceProvider
 {

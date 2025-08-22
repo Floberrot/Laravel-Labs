@@ -33,6 +33,6 @@ class PaymentCommand extends Command
      */
     public function handle()
     {
-        dd($this->gateway);
+        $this->info($this->gateway::class);
     }
 }
