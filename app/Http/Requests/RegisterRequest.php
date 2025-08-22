@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Validators\ValidateBannedNames;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator as ValidationValidator;
 
 class RegisterRequest extends FormRequest
 {
@@ -54,7 +56,7 @@ class RegisterRequest extends FormRequest
     {
         $this->merge([
             'email' => $this->email ? strtolower(trim($this->email)) : null,
-            'name'  => $this->name ? trim($this->name) : null,
+            'name'  => $this->name ? trim(ucfirst(strtolower($this->name))) : null,
         ]);
     }
 
@@ -63,6 +65,29 @@ class RegisterRequest extends FormRequest
         throw new HttpResponseException(
             response()->json(['errors' => $validator->errors()], 422)
         );
+    }
+
+    public function after(): array
+    {
+        return [
+            new ValidateBannedNames($this->name),
+            function (\Illuminate\Contracts\Validation\Validator $validator) {
+                if (str_contains($this->email, 'icloud')) {
+                    $validator->errors()->add(
+                        'email',
+                        'ICloud address are not supported'
+                    );
+                }
+            }
+        ];
+    }
+
+    public function passedValidation(): void
+    {
+        // if i want to normalize fields after validation
+        $this->replace([
+            'name' => strtoupper($this->name)
+        ]);
     }
 
 }
