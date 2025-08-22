@@ -3,7 +3,7 @@
 use App\Enums\StatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Route;
@@ -104,7 +104,6 @@ Route::middleware('throttle:search')->group(function () {
     Route::post('/search', fn() => ['ok' => true]);
 });
 
-Route::resource('projects.tasks', CommentController::class)->shallow();
 
 Route::get('/session/set/{value}', function (Request $request, string $value) {
     session()->put('my_key', $value);
@@ -127,4 +126,9 @@ Route::get('/session/flash-get', function (Request $request) {
 
 Route::controller(ApiController::class)->prefix('v2')->name('api.v2.')->group(function () {
     Route::post('register', 'register');
+});
+
+Route::controller(PostController::class)->prefix('post')->name('post.')->group(function () {
+   Route::post('', 'store')
+        ->name('store');
 });
