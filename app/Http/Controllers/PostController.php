@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostSaved;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -15,7 +15,7 @@ class PostController extends Controller
 
         try {
             $post = Post::create($data);
-
+            PostSaved::dispatch($post);
             return response()->json([
                 'post' => $post
             ], 201);
@@ -23,6 +23,29 @@ class PostController extends Controller
             return response()->json([
                 'error' => $t->getMessage()
             ], 422);
+        }
+    }
+
+    public function index(): JsonResponse
+    {
+        $posts = Post::all();
+
+        return response()->json([
+            'posts' => $posts
+        ]);
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        try {
+            $post = Post::findOrFail($id);
+            return response()->json([
+                'post' => $post
+            ]);
+        } catch (\Exception $t) {
+            return response()->json([
+                'error' => $t->getMessage()
+            ], 404);
         }
     }
 }

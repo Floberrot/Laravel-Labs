@@ -83,7 +83,6 @@ Route::get('/status/{status}', function (StatusEnum $status) {
 });
 
 
-
 Route::get('/files/link/{id}', function (int $id) {
     $url = URL::temporarySignedRoute('files.download', now()->addSeconds(300), ['id' => $id]);
     return ['link' => $url];
@@ -94,10 +93,10 @@ Route::get('/files/{id}/download', function (int $id) {
 })->name('files.download')->middleware('signed');
 
 
-RateLimiter::for('search', function (\Illuminate\Http\Request $request){
-   return $request->user()
-       ? Limit::perMinute(100)->by($request->user()->id)
-       : Limit::perMinute(10)->by($request->ip());
+RateLimiter::for('search', function (\Illuminate\Http\Request $request) {
+    return $request->user()
+        ? Limit::perMinute(100)->by($request->user()->id)
+        : Limit::perMinute(10)->by($request->ip());
 });
 
 Route::middleware('throttle:search')->group(function () {
@@ -128,7 +127,12 @@ Route::controller(ApiController::class)->prefix('v2')->name('api.v2.')->group(fu
     Route::post('register', 'register');
 });
 
-Route::controller(PostController::class)->prefix('post')->name('post.')->group(function () {
-   Route::post('', 'store')
+Route::controller(PostController::class)->prefix('posts')->name('posts.')->group(function () {
+    Route::post('', 'store')
         ->name('store');
+    Route::get('', 'index')
+        ->name('index');
+    Route::get('/{id}', 'show')
+        ->whereNumber('id')
+        ->name('show.id');
 });
