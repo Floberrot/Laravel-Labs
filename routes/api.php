@@ -136,3 +136,7 @@ Route::controller(PostController::class)->prefix('posts')->name('posts.')->group
         ->whereNumber('id')
         ->name('show.id');
 });
+
+Route::get('/logs', function () {
+    return DB::select('SELECT * from logs');
+});
