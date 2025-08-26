@@ -3,6 +3,7 @@
 use App\Enums\StatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -190,3 +191,6 @@ Route::get('/counter/reset', function () {
     Cache::put('message', 'the counter has been deleted', 60);
     return response()->json(['counter' => 0, 'message' => Cache::get('message')]);
 });
+
+Route::apiResource('books', BookController::class);
+
