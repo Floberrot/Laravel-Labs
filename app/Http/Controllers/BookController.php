@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BookRequest;
 use App\Http\Requests\PatchBookRequest;
 use App\Http\Requests\PostBookRequest;
 use App\Models\Book;
