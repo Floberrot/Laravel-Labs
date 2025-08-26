@@ -23,7 +23,7 @@ class PatchCommentRequest extends FormRequest
     {
         return [
             'content' => 'sometimes|string|max:255',
-            'approved' => 'sometimes|boolean:'
+            'approved' => 'sometimes|booleans'
         ];
     }
 }

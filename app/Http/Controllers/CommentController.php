@@ -18,7 +18,7 @@ class CommentController extends Controller
     {
         return response()->json([
             'book' => $book,
-            'comments' => $book->comments()->get()
+            'comments' => $book->comments()->latest()->paginate(10)
         ]);
     }
 
@@ -30,7 +30,7 @@ class CommentController extends Controller
         $book->comments()->create($request->validated());
         return response()->json([
             'book' => $book,
-            'comments' => $book->comments()->get()
+            'comments' => $book->comments()->latest()->paginate(10)
         ], Response::HTTP_CREATED);
     }
 

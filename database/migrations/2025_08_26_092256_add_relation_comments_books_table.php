@@ -20,6 +20,11 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropColumns('comments', 'book_id');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('book_id');
+            // Équivalent à:
+            // $table->dropForeign(['book_id']);
+            // $table->dropColumn('book_id');
+        });
     }
 };
