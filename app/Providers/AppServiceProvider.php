@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // This is the way we do that without the Attribute #[ObservedBy] on model class.
+        // Post::observe(PostObserver::class);
     }
 }

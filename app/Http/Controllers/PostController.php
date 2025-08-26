@@ -20,6 +20,7 @@ class PostController extends Controller
                 'post' => $post
             ], 201);
         } catch (\Throwable $t) {
+            dd($t);
             return response()->json([
                 'error' => $t->getMessage()
             ], 422);
