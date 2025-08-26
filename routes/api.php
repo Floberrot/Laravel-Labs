@@ -6,6 +6,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 Route::pattern('slug', '[a-z0-9-]+');
@@ -137,6 +138,55 @@ Route::controller(PostController::class)->prefix('posts')->name('posts.')->group
         ->name('show.id');
 });
 
-Route::get('/logs', function () {
-    return DB::select('SELECT * from logs');
+Route::prefix('/logs')->name('logs.')->group(function () {
+    Route::get('', function () {
+        return DB::table('logs')
+            ->select('id', 'message')
+            ->orderBy('id', 'ASC')
+            ->get();
+    })->name('get');
+    Route::get('/search', function (\Illuminate\Http\Request $request) {
+        return DB::table('logs')
+            ->select('id', 'message')
+            ->where('message', 'like', "%{$request->get('search')}%")
+            ->get();
+    });
+    Route::get('/paginated', function () {
+        return DB::table('logs')
+            ->select('id', 'message')
+            ->paginate(1);
+    })->name('paginated');
+    Route::get('/search-paginated', function (\Illuminate\Http\Request $request) {
+        return DB::table('logs')
+            ->select('id', 'message')
+            ->where('message', 'like', "%{$request->get('q')}%")
+            ->paginate(1)
+            ->withQueryString();
+    })->name('paginated.search');
+    Route::get('/paginated-simple', function () {
+        return DB::table('logs')
+            ->select('id', 'message')
+            ->simplePaginate(1);
+    })->name('paginated.simple');
+    Route::get('/{id}', function (int $id) {
+        $log = DB::table('logs')
+            ->select('id', 'message')
+            ->where('id', '=', $id)
+            ->first();
+        if (null === $log) {
+            return response()->json([
+                'error' => 'log not found'
+            ], 404);
+        }
+        return $log;
+    })->name('show.id')->whereNumber('id');
+});
+
+Route::get('/counter', fn() => response()->json(['counter' => (int)Redis::incr('counter')])
+);
+
+Route::get('/counter/reset', function () {
+    Redis::del('counter');
+    Cache::put('message', 'the counter has been deleted', 60);
+    return response()->json(['counter' => 0, 'message' => Cache::get('message')]);
 });
