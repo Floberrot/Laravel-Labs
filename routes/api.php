@@ -4,6 +4,7 @@ use App\Enums\StatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookDetailController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
@@ -195,4 +196,5 @@ Route::get('/counter/reset', function () {
 
 Route::apiResource('books', BookController::class);
 Route::apiResource('books.comments', CommentController::class)->shallow();
+Route::apiResource('books.book-details', BookDetailController::class)->shallow();
 
