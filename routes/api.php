@@ -5,8 +5,10 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookDetailController;
+use App\Http\Controllers\BookTagController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TestController;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Redis;
@@ -197,4 +199,12 @@ Route::get('/counter/reset', function () {
 Route::apiResource('books', BookController::class);
 Route::apiResource('books.comments', CommentController::class)->shallow();
 Route::apiResource('books.book-details', BookDetailController::class)->shallow();
+Route::apiResource('tags', TagController::class)->shallow();
 
+
+Route::prefix('books/{book}')->group(function () {
+    Route::get('tags', [BookTagController::class, 'index']);      // liste
+    Route::post('tags', [BookTagController::class, 'attach']);    // ajoute sans retirer
+    Route::put('tags', [BookTagController::class, 'sync']);       // remplace l’ensemble
+    Route::delete('tags/{tag}', [BookTagController::class, 'detach']); // enlève un tag
+});
