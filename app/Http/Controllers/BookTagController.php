@@ -12,9 +12,18 @@ class BookTagController extends Controller
 {
     public function index(Book $book): JsonResponse
     {
+        $tags = $book->tags()               // relation
+        ->orderBy('name')
+            ->get()                         // récupère les Tag + pivot en mémoire
+            ->map(fn($t) => [
+                'id' => $t->id,
+                'name' => $t->name,
+                'weight' => $t->pivot->weight,
+            ]);
+
         return response()->json([
             'book' => $book->only(['id', 'title']),
-            'tags' => $book->tags()->orderBy('name')->get(['tags.id', 'name', 'weight']),
+            'tags' => $tags,
         ]);
     }
 

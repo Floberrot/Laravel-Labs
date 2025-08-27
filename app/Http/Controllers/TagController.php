@@ -15,7 +15,7 @@ class TagController extends Controller
     {
         return response()->json([
             'tag' => Tag::all()
-        ], Response::HTTP_CREATED);
+        ]);
     }
 
     /**
