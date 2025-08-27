@@ -39,7 +39,7 @@ class UpdateBookDetailRequest extends FormRequest
     public function passedValidation(): void
     {
         if ($this->isbn !== null) {
-            $this->replace([
+            $this->merge([
                 'isbn' => $this->toIsbn($this->isbn)
             ]);
         }

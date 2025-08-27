@@ -18,7 +18,7 @@ class BookDetailController extends Controller
     {
         return response()->json([
             'message' => "Book detail for " . $book->title,
-            'book_detail' => $book->bookDetail()->get()
+            'book_detail' => $book->detail()
         ]);
     }
 
@@ -27,11 +27,11 @@ class BookDetailController extends Controller
      */
     public function store(StoreBookDetailRequest $request, Book $book): JsonResponse
     {
-        $book->bookDetail()->create($request->validated());
+        $book->detail()->create($request->validated());
 
         return response()->json([
             'message' => "Thanks for adding details on " . $book->title,
-            'book_detail' => $book->bookDetail()->get()
+            'book_detail' => $book->detail()
         ], Response::HTTP_CREATED);
     }
 
@@ -41,7 +41,7 @@ class BookDetailController extends Controller
     public function show(BookDetail $bookDetail)
     {
         return response()->json([
-            'message' => "Book detail of " . $bookDetail->book()->get()->first()->title,
+            'message' => "Book detail of " . $bookDetail->book->title,
             'book_detail' => $bookDetail
         ]);
     }
@@ -64,7 +64,7 @@ class BookDetailController extends Controller
      */
     public function destroy(BookDetail $bookDetail)
     {
-        $title = $bookDetail->book()->get()->first()->title;
+        $title = $bookDetail->book->title;
 
         $bookDetail->delete();
 

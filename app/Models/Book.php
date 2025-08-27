@@ -18,7 +18,7 @@ class Book extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function bookDetail(): HasOne
+    public function detail(): HasOne
     {
         return $this->hasOne(BookDetail::class);
     }

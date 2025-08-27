@@ -39,7 +39,7 @@ class StoreBookDetailRequest extends FormRequest
      */
     public function passedValidation(): void
     {
-        $this->replace([
+        $this->merge([
             'isbn' => $this->toIsbn($this->isbn)
         ]);
     }
