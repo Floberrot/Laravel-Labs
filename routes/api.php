@@ -150,6 +150,9 @@ Route::prefix('/logs')->name('logs.')->group(function () {
             ->orderBy('id', 'ASC')
             ->get();
     })->name('get');
+    Route::get('/raw', function () {
+        return \App\Models\Log::all();
+    })->name('raw');
     Route::get('/search', function (\Illuminate\Http\Request $request) {
         return DB::table('logs')
             ->select('id', 'message')

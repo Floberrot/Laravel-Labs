@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookDetailRequest;
 use App\Http\Requests\UpdateBookDetailRequest;
+use App\Http\Resources\BookDetailResource;
 use App\Models\Book;
 use App\Models\BookDetail;
 use Illuminate\Http\JsonResponse;
@@ -16,10 +17,7 @@ class BookDetailController extends Controller
      */
     public function index(Book $book): JsonResponse
     {
-        return response()->json([
-            'message' => "Book detail for " . $book->title,
-            'book_detail' => $book->detail
-        ]);
+        return BookDetailResource::collection($book->detail()->get())->response();
     }
 
     /**

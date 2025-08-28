@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PatchBookRequest;
 use App\Http\Requests\PostBookRequest;
+use App\Http\Resources\BookCollection;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,7 +16,9 @@ class BookController extends Controller
     public function index(Request $request): JsonResponse
     {
         if (!$request->boolean('groupByDate')) {
-            return response()->json(Book::orderByDesc('published_at')->paginate(10));
+            $books = Book::with('detail')->orderByDesc('published_at')->paginate(10);
+
+            return new BookCollection($books)->response();
         }
 
         $books = Book::all();
@@ -46,9 +50,7 @@ class BookController extends Controller
 
     public function show(Book $book): JsonResponse
     {
-        return response()->json([
-            'book' => $book,
-        ]);
+        return new BookResource($book)->response();
     }
 
     public function update(PatchBookRequest $request, Book $book): JsonResponse
