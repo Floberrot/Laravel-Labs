@@ -37,5 +37,19 @@ class Book extends Model
             get: fn(mixed $value) => new \DateTime($value)->format('Y-m-d')
         );
     }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value) => new \DateTime($value)->format('Y-m-d H:i:s')
+        );
+    }
+
+    protected function updatedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value) => new \DateTime($value)->format('Y-m-d H:i:s')
+        );
+    }
 }
 
