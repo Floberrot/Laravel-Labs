@@ -25,11 +25,7 @@ class Log extends Model
     public function infoColor(): Attribute
     {
         return Attribute::make(
-            get: fn() => match ($this->type) {
-                LogTypeEnum::INFO => 'yellow',
-                LogTypeEnum::EMERGENCY => 'red',
-                LogTypeEnum::ALERT => 'orange',
-            }
+            get: fn() => $this->type?->color()
         );
     }
 
