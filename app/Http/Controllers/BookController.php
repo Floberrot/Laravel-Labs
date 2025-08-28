@@ -6,13 +6,32 @@ use App\Http\Requests\PatchBookRequest;
 use App\Http\Requests\PostBookRequest;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(Book::orderByDesc('published_at')->paginate(10));
+        if (!$request->boolean('groupByDate')) {
+            return response()->json(Book::orderByDesc('published_at')->paginate(10));
+        }
+
+        $books = Book::all();
+        $filtered = $books
+            ->filter(fn(Book $book) => $book->available)
+            ->map(fn(Book $book) => [
+                'title' => strtoupper($book->title),
+                'author' => $book->author,
+                'year' => $book->published_at->year
+            ])
+            ->groupBy('year')
+            ->sortKeysDesc()
+            ->map(fn($group, $year) => ['year' => (int)$year, 'books' => $group->values()])
+            ->values();
+
+        return response()->json($filtered);
+
     }
 
     public function store(PostBookRequest $request): JsonResponse
