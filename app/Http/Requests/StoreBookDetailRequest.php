@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CurrencyEnum;
 use App\ISBNFormatTrait;
 use Exception;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StoreBookDetailRequest extends FormRequest
 {
@@ -30,7 +32,10 @@ class StoreBookDetailRequest extends FormRequest
     {
         return [
             'isbn' => 'required|string|unique:book_details,isbn',
-            'pages' => 'sometimes|integer|min:0'
+            'pages' => 'sometimes|integer|min:0',
+            'price' => ['sometimes', 'array'],
+            'price.amount' => ['required_with:price', 'numeric', 'min:0'],
+            'price.currency' => ['required_with:price', Rule::enum(CurrencyEnum::class)],
         ];
     }
 

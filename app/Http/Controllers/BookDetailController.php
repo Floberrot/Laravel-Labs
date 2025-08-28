@@ -18,7 +18,7 @@ class BookDetailController extends Controller
     {
         return response()->json([
             'message' => "Book detail for " . $book->title,
-            'book_detail' => $book->detail()
+            'book_detail' => $book->detail
         ]);
     }
 
@@ -31,7 +31,7 @@ class BookDetailController extends Controller
 
         return response()->json([
             'message' => "Thanks for adding details on " . $book->title,
-            'book_detail' => $book->detail()
+            'book_detail' => $book->detail
         ], Response::HTTP_CREATED);
     }
 
