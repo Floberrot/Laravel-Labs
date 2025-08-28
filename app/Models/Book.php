@@ -38,6 +38,14 @@ class Book extends Model
         );
     }
 
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value) => \Str::ucfirst($value),
+            set: fn(mixed $value) => \Str::lower($value)
+        );
+    }
+
     protected function createdAt(): Attribute
     {
         return Attribute::make(

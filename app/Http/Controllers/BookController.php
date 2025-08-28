@@ -7,7 +7,6 @@ use App\Http\Requests\PostBookRequest;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
@@ -22,7 +21,7 @@ class BookController extends Controller
         $filtered = $books
             ->filter(fn(Book $book) => $book->available)
             ->map(fn(Book $book) => [
-                'title' => Str::upper($book->title),
+                'title' => $book->title,
                 'author' => $book->author,
                 'published_at' => $book->published_at,
             ])
