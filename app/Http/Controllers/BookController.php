@@ -24,9 +24,9 @@ class BookController extends Controller
             ->map(fn(Book $book) => [
                 'title' => Str::upper($book->title),
                 'author' => $book->author,
-                'year' => $book->published_at->year
+                'published_at' => $book->published_at,
             ])
-            ->groupBy('year')
+            ->groupBy(fn($book) => new \DateTime($book['published_at'])->format('Y'))
             ->sortKeysDesc()
             ->map(fn($group, $year) => ['year' => (int)$year, 'books' => $group->values()])
             ->values();
