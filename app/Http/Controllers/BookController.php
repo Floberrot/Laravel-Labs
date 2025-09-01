@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookCreated;
 use App\Http\Requests\PatchBookRequest;
 use App\Http\Requests\PostBookRequest;
 use App\Http\Resources\BookCollection;
@@ -41,6 +42,7 @@ class BookController extends Controller
     public function store(PostBookRequest $request): JsonResponse
     {
         $book = Book::create($request->validated());
+        BookCreated::dispatch($book);
 
         return response()->json([
             'message' => 'Book created',

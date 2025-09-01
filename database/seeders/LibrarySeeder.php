@@ -15,7 +15,13 @@ class LibrarySeeder extends Seeder
      */
     public function run(): void
     {
+        Book::factory()->count(10)
+            ->unavailable()
+            ->has(BookDetail::factory(), 'detail')
+            ->create();
+
         Book::factory()->count(50)
+            ->available()
             ->has(BookDetail::factory(), 'detail')
             ->create();
 

@@ -25,4 +25,14 @@ class BookFactory extends Factory
             'available' => $this->faker->boolean
         ];
     }
+
+    public function available(): Factory
+    {
+        return $this->state(fn() => ['available' => true]);
+    }
+
+    public function unavailable(): Factory
+    {
+        return $this->state(fn() => ['available' => false]);
+    }
 }
