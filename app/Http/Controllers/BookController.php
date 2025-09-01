@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\BookCreated;
+use App\Events\BookRetrieved;
 use App\Http\Requests\PatchBookRequest;
 use App\Http\Requests\PostBookRequest;
 use App\Http\Resources\BookCollection;
@@ -52,6 +53,7 @@ class BookController extends Controller
 
     public function show(Book $book): JsonResponse
     {
+        BookRetrieved::dispatch($book);
         return new BookResource($book)->response();
     }
 
