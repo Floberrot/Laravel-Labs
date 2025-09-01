@@ -18,11 +18,11 @@ class BookDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'isbn' => $this->faker->isbn10(),
+            'isbn' => $this->faker->unique()->isbn10(),
             'pages' => $this->faker->numberBetween(100, 500),
             'price' => [
                 'amount' => $this->faker->randomFloat(2, 5, 45),
-                'currency' => CurrencyEnum::EURO
+                'currency' => CurrencyEnum::EURO->value
             ],
             'created_at' => now(),
             'updated_at' => now(),

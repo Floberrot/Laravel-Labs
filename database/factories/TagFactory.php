@@ -19,7 +19,7 @@ class TagFactory extends Factory
     {
         $names = array_map(fn(TagEnum $enum) => $enum->value, TagEnum::cases());
         return [
-            'name' => $names[array_rand(TagEnum::cases())],
+            'name' => $this->faker->unique()->randomElement($names),
             'created_at' => now(),
             'updated_at' => now(),
         ];

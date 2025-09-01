@@ -19,20 +19,12 @@ class LibrarySeeder extends Seeder
             ->has(BookDetail::factory(), 'detail')
             ->create();
 
-        $bd = Tag::factory()->create([
-            'name' => TagEnum::BD
-        ]);
-        $manga = Tag::factory()->create([
-            'name' => TagEnum::MANGA
-        ]);
-        $graphicBook = Tag::factory()->create([
-            'name' => TagEnum::GRAPHIC_BOOK
-        ]);
-
-        $tags = [$bd, $manga, $graphicBook];
+        $tags = collect(TagEnum::cases())
+            ->map(fn($e) => Tag::firstOrCreate(['name' => $e->value]));
 
         foreach (Book::all() as $book) {
-            $book->tags()->attach($tags[array_rand($tags)]);
+            $pick = $tags->random(rand(1, $tags->count()))->pluck('id')->all();
+            $book->tags()->syncWithoutDetaching($pick);
         }
     }
 }
