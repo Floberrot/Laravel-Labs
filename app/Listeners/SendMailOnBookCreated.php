@@ -4,10 +4,17 @@ namespace App\Listeners;
 
 use App\Events\BookCreated;
 use App\Mail\BookCreatedMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendMailOnBookCreated
+class SendMailOnBookCreated implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public int $tries = 3;
+    public int $backoff = 60;
+
     /**
      * Create the event listener.
      */
