@@ -4,6 +4,7 @@ use App\Enums\StatusEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookCoverController;
 use App\Http\Controllers\BookDetailController;
 use App\Http\Controllers\BookTagController;
 use App\Http\Controllers\CommentController;
@@ -211,3 +212,7 @@ Route::prefix('books/{book}')->group(function () {
     Route::put('tags', [BookTagController::class, 'sync']);       // remplace l’ensemble
     Route::delete('tags/{tag}', [BookTagController::class, 'detach']); // enlève un tag
 });
+
+Route::post('/books/{book}/cover', [BookCoverController::class, 'store']);
+Route::delete('/books/{book}/cover', [BookCoverController::class, 'destroy']);
+Route::get('/books/{book}/cover/signed', [BookCoverController::class, 'showSignedUrl']);
