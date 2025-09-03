@@ -21,3 +21,4 @@
 - Queues ans Laravel Horizon
 - File storage
 - Processes
+- Schedule
