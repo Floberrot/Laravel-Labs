@@ -3,17 +3,18 @@
 namespace App\Listeners;
 
 use App\Events\BookCreated;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class LogOnBookCreated
+class LogOnBookCreated implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use Queueable;
+    use InteractsWithQueue;
+
+    public int $tries = 3;
+    public int $backoff = 60;
 
     /**
      * Handle the event.
@@ -23,5 +24,10 @@ class LogOnBookCreated
         Log::info("Book has just been created", ['book' => $event->book]);
 
         // Here I will end an email.
+    }
+
+    public function viaQueue(): string
+    {
+        return 'send-log';
     }
 }

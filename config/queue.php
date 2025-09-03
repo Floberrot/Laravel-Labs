@@ -87,9 +87,9 @@ return [
 
             'options' => [
                 'queue' => [
-//                    'exchange' => 'book',
-//                    'exchange_type' => 'topic', // direct | topic | fanout | headers
-//                    'exchange_routing_key' => 'book.*',
+                    'exchange' => 'book',
+                    'exchange_type' => 'topic', // direct | topic | fanout | headers
+                    'exchange_routing_key' => 'book.created',
                     'declare' => true,
                 ],
             ],
