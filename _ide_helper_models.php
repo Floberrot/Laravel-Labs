@@ -20,6 +20,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $available
+ * @property string|null $cover_path
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
  * @property-read int|null $comments_count
  * @property-read \App\Models\BookDetail|null $detail
@@ -31,6 +32,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Book query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Book whereAuthor($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Book whereAvailable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Book whereCoverPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Book whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Book whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Book wherePublishedAt($value)
