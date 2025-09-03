@@ -3,23 +3,12 @@
 namespace App\Jobs;
 
 use App\Models\Book;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class DeleteDuplicateBooks implements ShouldQueue
+class DeleteDuplicateBooks
 {
-    use Queueable;
     use Dispatchable;
-    use InteractsWithQueue;
-
-    public function __construct()
-    {
-        $this->queue = 'book-duplicates';
-        $this->connection = 'redis';
-    }
 
 
     public function handle(): void
